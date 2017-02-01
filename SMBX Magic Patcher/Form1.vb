@@ -85,7 +85,7 @@ Public Class Form1
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button_ApplyPatch.Click
         CircularProgress_Apply.IsRunning = True
-        LabelX14.Enabled = True
+        LabelX14.Visible = True
         Button_ApplyPatch.Enabled = True
 
         Select Case SMBXPFX.ApplyPatch(TextBoxX_OriginalLevelApply.Text, TextBoxX_PatchFileApply.Text)
@@ -95,7 +95,7 @@ Public Class Form1
             Case Else : MessageBoxEx.Show("Done", "There is an unknown error!", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Select
 
-        LabelX14.Enabled = False
+        LabelX14.Visible = False
         CircularProgress_Apply.IsRunning = False
         Button_ApplyPatch.Enabled = False
     End Sub
@@ -122,7 +122,7 @@ Public Class SMBXPFX
     Shared Function CreatePatch(OriginalLevel As String, PatchedLevel As String, PatchFile As String, Optional UseCustomOriginalLevelFile As Boolean = False, Optional CopyBlocksEtc As Boolean = True, Optional CopyGraphics As Boolean = True, Optional CopyConfigurations As Boolean = True, Optional CopyEvents As Boolean = True, Optional CopyLayers As Boolean = True, Optional CopyVariables As Boolean = True, Optional CopyScripts As Boolean = True, Optional CopyLiquids As Boolean = True) As Integer
         Dim CheckIfFilesExists = True
         If Not UseCustomOriginalLevelFile Then
-            OriginalLevel = Application.StartupPath & "\emptylevel\emptylevel.dat"
+            OriginalLevel = Application.StartupPath & "\Data\emptylevel\emptylevel.dat"
             CheckIfFilesExists = False
         End If
 
@@ -177,11 +177,11 @@ SkipCheck:  End If
         If Directory.Exists(TempLeveldir) Then Directory.Delete(TempLeveldir, True) : Application.DoEvents()
         Directory.CreateDirectory(TempLeveldir) : Application.DoEvents()
         For Each f As String In FilesToCopyInLeveldir
-            Try : File.Copy(f, TempLeveldir & "\" & Path.GetFileName(f)) : Catch ex As Exception : MsgBox(ex.Message) : End Try
+            Try : File.Copy(f, TempLeveldir & "\" & Path.GetFileName(f)) : Catch ex As Exception : End Try
             Application.DoEvents() : Next
         If FilesToCopyInLevelfiledir.Count > 0 Then Directory.CreateDirectory(TempLevelfiledir)
         For Each f As String In FilesToCopyInLevelfiledir
-            Try : File.Copy(f, TempLevelfiledir & "\" & Path.GetFileName(f)) : Catch ex As Exception : MsgBox(ex.Message) : End Try
+            Try : File.Copy(f, TempLevelfiledir & "\" & Path.GetFileName(f)) : Catch ex As Exception : End Try
             Application.DoEvents() : Next
 
         'Write level:
@@ -191,8 +191,8 @@ SkipCheck:  End If
         If File.Exists(PatchFile) Then File.Delete(PatchFile)
         Dim sevenzip As New Process
         If Environment.Is64BitOperatingSystem Then
-            sevenzip.StartInfo.FileName = Application.StartupPath & "\7-Zip\x64\7z.exe"
-        Else : sevenzip.StartInfo.FileName = Application.StartupPath & "\7-Zip\x86\7z.exe"
+            sevenzip.StartInfo.FileName = Application.StartupPath & "\Data\7-Zip\x64\7z.exe"
+        Else : sevenzip.StartInfo.FileName = Application.StartupPath & "\Data\7-Zip\x86\7z.exe"
         End If
         Dim password As String = "SMBXMagicPatcher"
         sevenzip.StartInfo.Arguments = String.Format("a -t7z ""{1}"" -p{0} -mhe -mx9 ""{2}""", password, Form1.TextBoxX_PatchFileCreate.Text, TempLeveldir & "\*")
@@ -227,8 +227,8 @@ SkipCheck:  End If
         If PatchTyp = 0 Then
             Dim sevenzip As New Process
             If Environment.Is64BitOperatingSystem Then
-                sevenzip.StartInfo.FileName = Application.StartupPath & "\7-Zip\x64\7z.exe"
-            Else : sevenzip.StartInfo.FileName = Application.StartupPath & "\7-Zip\x86\7z.exe"
+                sevenzip.StartInfo.FileName = Application.StartupPath & "\Data\7-Zip\x64\7z.exe"
+            Else : sevenzip.StartInfo.FileName = Application.StartupPath & "\Data\7-Zip\x86\7z.exe"
             End If
             Dim password As String = "SMBXMagicPatcher"
             sevenzip.StartInfo.Arguments = String.Format("x ""{1}"" -p{0} -o""{2}"" -r", password, Form1.TextBoxX_PatchFileApply.Text, TempLeveldir & "\")
@@ -260,7 +260,7 @@ SkipCheck:  End If
             If Not Directory.Exists(oLevelfiledir) And oListFilesInLevelfiledir.Count > 0 Then Directory.CreateDirectory(oLevelfiledir)
             For i As Integer = 0 To pListFilesInLeveldir.Count - 1
                 If Not pListFilesInLeveldir(i) = TempLeveldir & "\data.dat" Then
-                    File.Copy(pListFilesInLeveldir(i), oLeveldir & "\" & Path.GetFileName(pListFilesInLeveldir(i)), True) : MsgBox("") : End If
+                    File.Copy(pListFilesInLeveldir(i), oLeveldir & "\" & Path.GetFileName(pListFilesInLeveldir(i)), True) : End If
                 Application.DoEvents() : Next
             For i As Integer = 0 To pListFilesInLevelfiledir.Count - 1
                 File.Copy(pListFilesInLevelfiledir(i), oLevelfiledir & "\" & Path.GetFileName(pListFilesInLevelfiledir(i)), True)

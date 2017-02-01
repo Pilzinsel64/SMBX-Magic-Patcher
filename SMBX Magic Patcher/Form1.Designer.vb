@@ -66,6 +66,7 @@ Partial Class Form1
         Me.ButtonX1 = New DevComponents.DotNetBar.ButtonX()
         Me.TextBoxX_PatchFileCreate = New DevComponents.DotNetBar.Controls.TextBoxX()
         Me.TextBoxX_OriginalLevelCreate = New DevComponents.DotNetBar.Controls.TextBoxX()
+        Me.SuperTooltip1 = New DevComponents.DotNetBar.SuperTooltip()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         Me.TabPage2.SuspendLayout()
@@ -148,7 +149,7 @@ Partial Class Form1
         Me.LabelX4.Name = "LabelX4"
         Me.LabelX4.Size = New System.Drawing.Size(72, 23)
         Me.LabelX4.TabIndex = 39
-        Me.LabelX4.Text = "<font color=""#000000"">Patch file:</font>"
+        Me.LabelX4.Text = "<font color=""#000000"">Patch:</font>"
         '
         'LabelX6
         '
@@ -170,6 +171,7 @@ Partial Class Form1
         Me.ButtonX4.Name = "ButtonX4"
         Me.ButtonX4.Size = New System.Drawing.Size(33, 23)
         Me.ButtonX4.Style = DevComponents.DotNetBar.eDotNetBarStyle.VS2005
+        Me.SuperTooltip1.SetSuperTooltip(Me.ButtonX4, New DevComponents.DotNetBar.SuperTooltipInfo("", "", "Select the patch here.", Nothing, Nothing, DevComponents.DotNetBar.eTooltipColor.System, False, False, New System.Drawing.Size(0, 0)))
         Me.ButtonX4.Symbol = "58055"
         Me.ButtonX4.SymbolSet = DevComponents.DotNetBar.eSymbolSet.Material
         Me.ButtonX4.SymbolSize = 15.0!
@@ -187,6 +189,7 @@ Partial Class Form1
         Me.TextBoxX_PatchFileApply.PreventEnterBeep = True
         Me.TextBoxX_PatchFileApply.ReadOnly = True
         Me.TextBoxX_PatchFileApply.Size = New System.Drawing.Size(215, 20)
+        Me.SuperTooltip1.SetSuperTooltip(Me.TextBoxX_PatchFileApply, New DevComponents.DotNetBar.SuperTooltipInfo("", "", "Select the patch here.", Nothing, Nothing, DevComponents.DotNetBar.eTooltipColor.System, False, False, New System.Drawing.Size(0, 0)))
         Me.TextBoxX_PatchFileApply.TabIndex = 35
         Me.TextBoxX_PatchFileApply.WatermarkBehavior = DevComponents.DotNetBar.eWatermarkBehavior.HideNonEmpty
         Me.TextBoxX_PatchFileApply.WatermarkText = "No file loaded!"
@@ -199,6 +202,7 @@ Partial Class Form1
         Me.ButtonX6.Name = "ButtonX6"
         Me.ButtonX6.Size = New System.Drawing.Size(33, 23)
         Me.ButtonX6.Style = DevComponents.DotNetBar.eDotNetBarStyle.VS2005
+        Me.SuperTooltip1.SetSuperTooltip(Me.ButtonX6, New DevComponents.DotNetBar.SuperTooltipInfo("", "", "Select here your level on wich you would apply the patch.", Nothing, Nothing, DevComponents.DotNetBar.eTooltipColor.System, False, False, New System.Drawing.Size(0, 0)))
         Me.ButtonX6.Symbol = "58055"
         Me.ButtonX6.SymbolSet = DevComponents.DotNetBar.eSymbolSet.Material
         Me.ButtonX6.SymbolSize = 15.0!
@@ -216,6 +220,7 @@ Partial Class Form1
         Me.TextBoxX_OriginalLevelApply.PreventEnterBeep = True
         Me.TextBoxX_OriginalLevelApply.ReadOnly = True
         Me.TextBoxX_OriginalLevelApply.Size = New System.Drawing.Size(215, 20)
+        Me.SuperTooltip1.SetSuperTooltip(Me.TextBoxX_OriginalLevelApply, New DevComponents.DotNetBar.SuperTooltipInfo("", "", "Select here your level on wich you would apply the patch.", Nothing, Nothing, DevComponents.DotNetBar.eTooltipColor.System, False, False, New System.Drawing.Size(0, 0)))
         Me.TextBoxX_OriginalLevelApply.TabIndex = 31
         Me.TextBoxX_OriginalLevelApply.WatermarkBehavior = DevComponents.DotNetBar.eWatermarkBehavior.HideNonEmpty
         Me.TextBoxX_OriginalLevelApply.WatermarkText = "No file loaded!"
@@ -293,6 +298,7 @@ Partial Class Form1
         Me.GroupBox1.Location = New System.Drawing.Point(6, 118)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Size = New System.Drawing.Size(330, 136)
+        Me.SuperTooltip1.SetSuperTooltip(Me.GroupBox1, New DevComponents.DotNetBar.SuperTooltipInfo("", "", "Check which things you would include in the patch.", Nothing, Nothing, DevComponents.DotNetBar.eTooltipColor.System, False, False, New System.Drawing.Size(0, 0)))
         Me.GroupBox1.TabIndex = 1
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Settings"
@@ -310,6 +316,7 @@ Partial Class Form1
         Me.SwitchButton_Liquids.OnText = "Yes"
         Me.SwitchButton_Liquids.Size = New System.Drawing.Size(57, 23)
         Me.SwitchButton_Liquids.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled
+        Me.SuperTooltip1.SetSuperTooltip(Me.SwitchButton_Liquids, New DevComponents.DotNetBar.SuperTooltipInfo("", "", "If this is ""Yes"" then all Liquids will include in the patch.", Nothing, Nothing, DevComponents.DotNetBar.eTooltipColor.System, False, False, New System.Drawing.Size(0, 0)))
         Me.SwitchButton_Liquids.TabIndex = 49
         '
         'LabelX8
@@ -349,6 +356,7 @@ Partial Class Form1
         Me.SwitchButton_Layers.OnText = "Yes"
         Me.SwitchButton_Layers.Size = New System.Drawing.Size(57, 23)
         Me.SwitchButton_Layers.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled
+        Me.SuperTooltip1.SetSuperTooltip(Me.SwitchButton_Layers, New DevComponents.DotNetBar.SuperTooltipInfo("", "", "If this is ""Yes"" then all Layers will include in the patch.", Nothing, Nothing, DevComponents.DotNetBar.eTooltipColor.System, False, False, New System.Drawing.Size(0, 0)))
         Me.SwitchButton_Layers.TabIndex = 48
         Me.SwitchButton_Layers.Value = True
         Me.SwitchButton_Layers.ValueObject = "Y"
@@ -366,6 +374,7 @@ Partial Class Form1
         Me.SwitchButton_Scripts.OnText = "Yes"
         Me.SwitchButton_Scripts.Size = New System.Drawing.Size(57, 23)
         Me.SwitchButton_Scripts.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled
+        Me.SuperTooltip1.SetSuperTooltip(Me.SwitchButton_Scripts, New DevComponents.DotNetBar.SuperTooltipInfo("", "", "If this is ""Yes"" then all Scripts will include in the patch.", Nothing, Nothing, DevComponents.DotNetBar.eTooltipColor.System, False, False, New System.Drawing.Size(0, 0)))
         Me.SwitchButton_Scripts.TabIndex = 42
         Me.SwitchButton_Scripts.Value = True
         Me.SwitchButton_Scripts.ValueObject = "Y"
@@ -407,6 +416,7 @@ Partial Class Form1
         Me.SwitchButton_Variables.OnText = "Yes"
         Me.SwitchButton_Variables.Size = New System.Drawing.Size(57, 23)
         Me.SwitchButton_Variables.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled
+        Me.SuperTooltip1.SetSuperTooltip(Me.SwitchButton_Variables, New DevComponents.DotNetBar.SuperTooltipInfo("", "", "If this is ""Yes"" then all Local Variables will include in the patch.", Nothing, Nothing, DevComponents.DotNetBar.eTooltipColor.System, False, False, New System.Drawing.Size(0, 0)))
         Me.SwitchButton_Variables.TabIndex = 46
         Me.SwitchButton_Variables.Value = True
         Me.SwitchButton_Variables.ValueObject = "Y"
@@ -424,6 +434,7 @@ Partial Class Form1
         Me.SwitchButton_Events.OnText = "Yes"
         Me.SwitchButton_Events.Size = New System.Drawing.Size(57, 23)
         Me.SwitchButton_Events.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled
+        Me.SuperTooltip1.SetSuperTooltip(Me.SwitchButton_Events, New DevComponents.DotNetBar.SuperTooltipInfo("", "", "If this is ""Yes"" then all Events will include in the patch.", Nothing, Nothing, DevComponents.DotNetBar.eTooltipColor.System, False, False, New System.Drawing.Size(0, 0)))
         Me.SwitchButton_Events.TabIndex = 44
         Me.SwitchButton_Events.Value = True
         Me.SwitchButton_Events.ValueObject = "Y"
@@ -465,6 +476,8 @@ Partial Class Form1
         Me.SwitchButton_BlocksEtc.OnText = "Yes"
         Me.SwitchButton_BlocksEtc.Size = New System.Drawing.Size(57, 23)
         Me.SwitchButton_BlocksEtc.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled
+        Me.SuperTooltip1.SetSuperTooltip(Me.SwitchButton_BlocksEtc, New DevComponents.DotNetBar.SuperTooltipInfo("", "", "If this is ""Yes"" then all Blocks, NPC's and Backgrounds will include in the patch" &
+            ".", Nothing, Nothing, DevComponents.DotNetBar.eTooltipColor.System, False, False, New System.Drawing.Size(0, 0)))
         Me.SwitchButton_BlocksEtc.TabIndex = 34
         '
         'LabelX9
@@ -504,6 +517,8 @@ Partial Class Form1
         Me.SwitchButton_Configs.OnText = "Yes"
         Me.SwitchButton_Configs.Size = New System.Drawing.Size(57, 23)
         Me.SwitchButton_Configs.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled
+        Me.SuperTooltip1.SetSuperTooltip(Me.SwitchButton_Configs, New DevComponents.DotNetBar.SuperTooltipInfo("", "", "If this is ""Yes"" then all custom configrations (like Custom NPC Configs) will inc" &
+            "lude in the patch.", Nothing, Nothing, DevComponents.DotNetBar.eTooltipColor.System, False, False, New System.Drawing.Size(0, 0)))
         Me.SwitchButton_Configs.TabIndex = 38
         Me.SwitchButton_Configs.Value = True
         Me.SwitchButton_Configs.ValueObject = "Y"
@@ -521,6 +536,7 @@ Partial Class Form1
         Me.SwitchButton_Graphics.OnText = "Yes"
         Me.SwitchButton_Graphics.Size = New System.Drawing.Size(57, 23)
         Me.SwitchButton_Graphics.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled
+        Me.SuperTooltip1.SetSuperTooltip(Me.SwitchButton_Graphics, New DevComponents.DotNetBar.SuperTooltipInfo("", "", "If this is ""Yes"" then all custom graphics will include in the patch.", Nothing, Nothing, DevComponents.DotNetBar.eTooltipColor.System, False, False, New System.Drawing.Size(0, 0)))
         Me.SwitchButton_Graphics.TabIndex = 36
         Me.SwitchButton_Graphics.Value = True
         Me.SwitchButton_Graphics.ValueObject = "Y"
@@ -537,6 +553,7 @@ Partial Class Form1
         Me.CheckBoxX2.Name = "CheckBoxX2"
         Me.CheckBoxX2.Size = New System.Drawing.Size(100, 23)
         Me.CheckBoxX2.Style = DevComponents.DotNetBar.eDotNetBarStyle.VS2005
+        Me.SuperTooltip1.SetSuperTooltip(Me.CheckBoxX2, New DevComponents.DotNetBar.SuperTooltipInfo("", "", resources.GetString("CheckBoxX2.SuperTooltip"), Nothing, Nothing, DevComponents.DotNetBar.eTooltipColor.System, False, False, New System.Drawing.Size(0, 0)))
         Me.CheckBoxX2.TabIndex = 32
         Me.CheckBoxX2.Text = "use custom level"
         '
@@ -555,6 +572,7 @@ Partial Class Form1
         Me.CheckBoxX1.Name = "CheckBoxX1"
         Me.CheckBoxX1.Size = New System.Drawing.Size(100, 23)
         Me.CheckBoxX1.Style = DevComponents.DotNetBar.eDotNetBarStyle.VS2005
+        Me.SuperTooltip1.SetSuperTooltip(Me.CheckBoxX1, New DevComponents.DotNetBar.SuperTooltipInfo("", "", "Use this option, if you would like to create a patch of your whole level.", Nothing, Nothing, DevComponents.DotNetBar.eTooltipColor.System, False, False, New System.Drawing.Size(0, 0)))
         Me.CheckBoxX1.TabIndex = 31
         Me.CheckBoxX1.Text = "use empty level"
         '
@@ -577,7 +595,7 @@ Partial Class Form1
         Me.LabelX3.Name = "LabelX3"
         Me.LabelX3.Size = New System.Drawing.Size(72, 23)
         Me.LabelX3.TabIndex = 29
-        Me.LabelX3.Text = "<font color=""#000000"">Patch file:</font>"
+        Me.LabelX3.Text = "<font color=""#000000"">Save as:</font>"
         '
         'LabelX2
         '
@@ -611,6 +629,7 @@ Partial Class Form1
         Me.ButtonX3.Name = "ButtonX3"
         Me.ButtonX3.Size = New System.Drawing.Size(33, 23)
         Me.ButtonX3.Style = DevComponents.DotNetBar.eDotNetBarStyle.VS2005
+        Me.SuperTooltip1.SetSuperTooltip(Me.ButtonX3, New DevComponents.DotNetBar.SuperTooltipInfo("", "", "Open here your level with the feautures wich should be in the patch.", Nothing, Nothing, DevComponents.DotNetBar.eTooltipColor.System, False, False, New System.Drawing.Size(0, 0)))
         Me.ButtonX3.Symbol = "58055"
         Me.ButtonX3.SymbolSet = DevComponents.DotNetBar.eSymbolSet.Material
         Me.ButtonX3.SymbolSize = 15.0!
@@ -628,6 +647,7 @@ Partial Class Form1
         Me.TextBoxX_ModifiedLevel.PreventEnterBeep = True
         Me.TextBoxX_ModifiedLevel.ReadOnly = True
         Me.TextBoxX_ModifiedLevel.Size = New System.Drawing.Size(215, 20)
+        Me.SuperTooltip1.SetSuperTooltip(Me.TextBoxX_ModifiedLevel, New DevComponents.DotNetBar.SuperTooltipInfo("", "", "Open here your level with the feautures wich should be in the patch.", Nothing, Nothing, DevComponents.DotNetBar.eTooltipColor.System, False, False, New System.Drawing.Size(0, 0)))
         Me.TextBoxX_ModifiedLevel.TabIndex = 25
         Me.TextBoxX_ModifiedLevel.WatermarkBehavior = DevComponents.DotNetBar.eWatermarkBehavior.HideNonEmpty
         Me.TextBoxX_ModifiedLevel.WatermarkText = "No file loaded!"
@@ -640,6 +660,7 @@ Partial Class Form1
         Me.ButtonX2.Name = "ButtonX2"
         Me.ButtonX2.Size = New System.Drawing.Size(33, 23)
         Me.ButtonX2.Style = DevComponents.DotNetBar.eDotNetBarStyle.VS2005
+        Me.SuperTooltip1.SetSuperTooltip(Me.ButtonX2, New DevComponents.DotNetBar.SuperTooltipInfo("", "", "Select here where the patch file should be saved.", Nothing, Nothing, DevComponents.DotNetBar.eTooltipColor.System, False, False, New System.Drawing.Size(0, 0)))
         Me.ButtonX2.Symbol = "57697"
         Me.ButtonX2.SymbolSet = DevComponents.DotNetBar.eSymbolSet.Material
         Me.ButtonX2.SymbolSize = 15.0!
@@ -654,6 +675,7 @@ Partial Class Form1
         Me.ButtonX1.Name = "ButtonX1"
         Me.ButtonX1.Size = New System.Drawing.Size(33, 23)
         Me.ButtonX1.Style = DevComponents.DotNetBar.eDotNetBarStyle.VS2005
+        Me.SuperTooltip1.SetSuperTooltip(Me.ButtonX1, New DevComponents.DotNetBar.SuperTooltipInfo("", "", "Open the ""without feauture"" level here.", Nothing, Nothing, DevComponents.DotNetBar.eTooltipColor.System, False, False, New System.Drawing.Size(0, 0)))
         Me.ButtonX1.Symbol = "58055"
         Me.ButtonX1.SymbolSet = DevComponents.DotNetBar.eSymbolSet.Material
         Me.ButtonX1.SymbolSize = 15.0!
@@ -671,6 +693,7 @@ Partial Class Form1
         Me.TextBoxX_PatchFileCreate.PreventEnterBeep = True
         Me.TextBoxX_PatchFileCreate.ReadOnly = True
         Me.TextBoxX_PatchFileCreate.Size = New System.Drawing.Size(215, 20)
+        Me.SuperTooltip1.SetSuperTooltip(Me.TextBoxX_PatchFileCreate, New DevComponents.DotNetBar.SuperTooltipInfo("", "", "Select here where the patch file should be saved.", Nothing, Nothing, DevComponents.DotNetBar.eTooltipColor.System, False, False, New System.Drawing.Size(0, 0)))
         Me.TextBoxX_PatchFileCreate.TabIndex = 22
         Me.TextBoxX_PatchFileCreate.WatermarkBehavior = DevComponents.DotNetBar.eWatermarkBehavior.HideNonEmpty
         Me.TextBoxX_PatchFileCreate.WatermarkText = "No file loaded!"
@@ -688,9 +711,15 @@ Partial Class Form1
         Me.TextBoxX_OriginalLevelCreate.PreventEnterBeep = True
         Me.TextBoxX_OriginalLevelCreate.ReadOnly = True
         Me.TextBoxX_OriginalLevelCreate.Size = New System.Drawing.Size(215, 20)
+        Me.SuperTooltip1.SetSuperTooltip(Me.TextBoxX_OriginalLevelCreate, New DevComponents.DotNetBar.SuperTooltipInfo("", "", "Open the ""without feauture"" level here.", Nothing, Nothing, DevComponents.DotNetBar.eTooltipColor.System, False, False, New System.Drawing.Size(0, 0)))
         Me.TextBoxX_OriginalLevelCreate.TabIndex = 21
         Me.TextBoxX_OriginalLevelCreate.WatermarkBehavior = DevComponents.DotNetBar.eWatermarkBehavior.HideNonEmpty
         Me.TextBoxX_OriginalLevelCreate.WatermarkText = "No file loaded!"
+        '
+        'SuperTooltip1
+        '
+        Me.SuperTooltip1.DefaultTooltipSettings = New DevComponents.DotNetBar.SuperTooltipInfo("", "", "", Nothing, Nothing, DevComponents.DotNetBar.eTooltipColor.Gray)
+        Me.SuperTooltip1.LicenseKey = "F962CEC7-CD8F-4911-A9E9-CAB39962FC1F"
         '
         'Form1
         '
@@ -755,4 +784,5 @@ Partial Class Form1
     Friend WithEvents LabelX15 As DevComponents.DotNetBar.LabelX
     Friend WithEvents CircularProgress_Apply As DevComponents.DotNetBar.Controls.CircularProgress
     Friend WithEvents CircularProgress_Create As DevComponents.DotNetBar.Controls.CircularProgress
+    Friend WithEvents SuperTooltip1 As DevComponents.DotNetBar.SuperTooltip
 End Class
