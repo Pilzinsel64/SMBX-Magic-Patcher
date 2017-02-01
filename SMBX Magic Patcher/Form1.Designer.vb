@@ -311,8 +311,6 @@ Partial Class Form1
         Me.SwitchButton_Liquids.Size = New System.Drawing.Size(57, 23)
         Me.SwitchButton_Liquids.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled
         Me.SwitchButton_Liquids.TabIndex = 49
-        Me.SwitchButton_Liquids.Value = True
-        Me.SwitchButton_Liquids.ValueObject = "Y"
         '
         'LabelX8
         '
@@ -468,8 +466,6 @@ Partial Class Form1
         Me.SwitchButton_BlocksEtc.Size = New System.Drawing.Size(57, 23)
         Me.SwitchButton_BlocksEtc.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled
         Me.SwitchButton_BlocksEtc.TabIndex = 34
-        Me.SwitchButton_BlocksEtc.Value = True
-        Me.SwitchButton_BlocksEtc.ValueObject = "Y"
         '
         'LabelX9
         '

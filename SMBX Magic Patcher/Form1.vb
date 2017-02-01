@@ -74,7 +74,8 @@ Public Class Form1
                                         SwitchButton_Liquids.Value)
 
             Case 1 : MessageBoxEx.Show("Done", "Patch succesfully created!", MessageBoxButtons.OK, MessageBoxIcon.Information)
-            Case Else : MessageBoxEx.Show("Done", "Patch succesfully created!", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            Case 2 : MessageBoxEx.Show("Done", "There is an error at packing!", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Case Else : MessageBoxEx.Show("Done", "There is an unknown error!", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Select
 
         Button_CreatePatch.Enabled = True
@@ -83,7 +84,20 @@ Public Class Form1
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button_ApplyPatch.Click
-        SMBXPFX.ApplyPatch(TextBoxX_OriginalLevelApply.Text, TextBoxX_PatchFileApply.Text)
+        CircularProgress_Apply.IsRunning = True
+        LabelX14.Enabled = True
+        Button_ApplyPatch.Enabled = True
+
+        Select Case SMBXPFX.ApplyPatch(TextBoxX_OriginalLevelApply.Text, TextBoxX_PatchFileApply.Text)
+            Case 1 : MessageBoxEx.Show("Done", "Patch applied succesfully!", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            Case 2 : MessageBoxEx.Show("Done", "There is an error at extracting files! Or maybe this isn't a valid patch file.", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Case 3 : MessageBoxEx.Show("Done", "This isn't a valid patch file.", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Case Else : MessageBoxEx.Show("Done", "There is an unknown error!", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Select
+
+        LabelX14.Enabled = False
+        CircularProgress_Apply.IsRunning = False
+        Button_ApplyPatch.Enabled = False
     End Sub
 
     Private Sub CheckBoxX2_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxX2.CheckedChanged
@@ -190,16 +204,17 @@ SkipCheck:  End If
             Return 2 'Error at packing
         End If
 
+        Directory.Delete(TempLeveldir, True)
         Return 1
     End Function
 
     Shared Function ApplyPatch(OriginalLevel As String, PatchFile As String) As Integer
         Dim PatchTyp As Integer = 0 '0 = plx | 1 = slp
         Dim PLevel As List(Of String) = File.ReadAllLines(OriginalLevel).ToList
-        Dim TempLeveldir As String = Form1.TempDir & "\TempLevel"
-        Dim TempLevelfiledir As String = TempLeveldir & "\data"
-        If Directory.Exists(TempLeveldir) Then Directory.Delete(TempLeveldir, True)
-        Directory.CreateDirectory(TempLeveldir)
+        Dim TempLeveldir As String = Form1.TempDir & "\TempLevel" : Dim TempLevelfiledir As String = TempLeveldir & "\data"
+        Dim oLeveldir As String = Path.GetDirectoryName(OriginalLevel) : Dim oLevelfiledir As String = oLeveldir & "\" & Path.GetFileNameWithoutExtension(OriginalLevel)
+        If Directory.Exists(TempLeveldir) Then Directory.Delete(TempLeveldir, True) : Application.DoEvents()
+        Directory.CreateDirectory(TempLeveldir) : Application.DoEvents()
 
         'Check Patchtyp:
         Select Case Path.GetExtension(PatchFile)
@@ -220,7 +235,6 @@ SkipCheck:  End If
             sevenzip.StartInfo.UseShellExecute = False
             sevenzip.StartInfo.CreateNoWindow = True
             sevenzip.Start()
-
             Do Until sevenzip.HasExited = True : Application.DoEvents() : Loop
             If sevenzip.ExitCode <> 0 Then
                 Return 2 'Error at packing
@@ -228,7 +242,7 @@ SkipCheck:  End If
         End If
 
         'Load patchlevel:
-        Dim PFile() As String = {""}
+        Dim PFile() As String = {}
         Select Case PatchTyp
             Case 0 : PFile = File.ReadAllLines(TempLeveldir & "\data.dat")
             Case 1 : PFile = File.ReadAllLines(PatchFile)
@@ -236,15 +250,21 @@ SkipCheck:  End If
 
         'Apply lines in patch to the level:
         For Each l As String In PFile
-            If Not PLevel.Contains(l) Then
-                PLevel.Add(l)
-            End If
+            If Not PLevel.Contains(l) Then PLevel.Add(l)
         Next
 
         'Copy and replace files
         If PatchTyp = 0 Then
-            Dim ListFilesInLeveldir() As String = Directory.GetFileSystemEntries(TempLeveldir)
-
+            Dim pListFilesInLeveldir() As String = Directory.GetFiles(TempLeveldir) : Dim pListFilesInLevelfiledir() As String = {} : If Directory.Exists(TempLevelfiledir) Then pListFilesInLevelfiledir = Directory.GetFiles(TempLevelfiledir)
+            Dim oListFilesInLeveldir() As String = Directory.GetFiles(oLeveldir) : Dim oListFilesInLevelfiledir() As String = {} : If Directory.Exists(oLevelfiledir) Then oListFilesInLevelfiledir = Directory.GetFiles(oLevelfiledir)
+            If Not Directory.Exists(oLevelfiledir) And oListFilesInLevelfiledir.Count > 0 Then Directory.CreateDirectory(oLevelfiledir)
+            For i As Integer = 0 To pListFilesInLeveldir.Count - 1
+                If Not pListFilesInLeveldir(i) = TempLeveldir & "\data.dat" Then
+                    File.Copy(pListFilesInLeveldir(i), oLeveldir & "\" & Path.GetFileName(pListFilesInLeveldir(i)), True) : MsgBox("") : End If
+                Application.DoEvents() : Next
+            For i As Integer = 0 To pListFilesInLevelfiledir.Count - 1
+                File.Copy(pListFilesInLevelfiledir(i), oLevelfiledir & "\" & Path.GetFileName(pListFilesInLevelfiledir(i)), True)
+                Application.DoEvents() : Next
         End If
 
         'Wirte new level file
