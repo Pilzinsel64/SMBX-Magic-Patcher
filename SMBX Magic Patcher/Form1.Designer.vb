@@ -560,7 +560,7 @@ Partial Class Form1
         Me.CheckBoxX1.Size = New System.Drawing.Size(100, 23)
         Me.CheckBoxX1.Style = DevComponents.DotNetBar.eDotNetBarStyle.VS2005
         Me.CheckBoxX1.TabIndex = 31
-        Me.CheckBoxX1.Text = "use emtpy level"
+        Me.CheckBoxX1.Text = "use empty level"
         '
         'Button_CreatePatch
         '

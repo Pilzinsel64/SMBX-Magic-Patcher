@@ -70,7 +70,8 @@ Public Class Form1
                                         SwitchButton_Events.Value,
                                         SwitchButton_Layers.Value,
                                         SwitchButton_Variables.Value,
-                                        SwitchButton_Scripts.Value)
+                                        SwitchButton_Scripts.Value,
+                                        SwitchButton_Liquids.Value)
 
             Case 1 : MessageBoxEx.Show("Done", "Patch succesfully created!", MessageBoxButtons.OK, MessageBoxIcon.Information)
             Case Else : MessageBoxEx.Show("Done", "Patch succesfully created!", MessageBoxButtons.OK, MessageBoxIcon.Information)
@@ -104,10 +105,11 @@ End Class
 
 Public Class SMBXPFX
 
-    Shared Function CreatePatch(OriginalLevel As String, PatchedLevel As String, PatchFile As String, Optional UseCustomOriginalLevelFile As Boolean = False, Optional CopyBlocksEtc As Boolean = True, Optional CopyGraphics As Boolean = True, Optional CopyConfigurations As Boolean = True, Optional CopyEvents As Boolean = True, Optional CopyLayers As Boolean = True, Optional CopyVariables As Boolean = True, Optional CopyScripts As Boolean = True) As Integer
+    Shared Function CreatePatch(OriginalLevel As String, PatchedLevel As String, PatchFile As String, Optional UseCustomOriginalLevelFile As Boolean = False, Optional CopyBlocksEtc As Boolean = True, Optional CopyGraphics As Boolean = True, Optional CopyConfigurations As Boolean = True, Optional CopyEvents As Boolean = True, Optional CopyLayers As Boolean = True, Optional CopyVariables As Boolean = True, Optional CopyScripts As Boolean = True, Optional CopyLiquids As Boolean = True) As Integer
+        Dim CheckIfFilesExists = True
         If Not UseCustomOriginalLevelFile Then
-            OriginalLevel = Application.StartupPath & "\emptylevel.dat"
-            CopyGraphics = False
+            OriginalLevel = Application.StartupPath & "\emptylevel\emptylevel.dat"
+            CheckIfFilesExists = False
         End If
 
         Dim OLevel() As String = File.ReadAllLines(OriginalLevel)
@@ -117,206 +119,69 @@ Public Class SMBXPFX
 
         'Add differences to patch:
         For Each l As String In PLevel
-            If Not OLevel.Contains(l) Then
+            If Not l Is "" And Not OLevel.Contains(l) And Not l.StartsWith("SMBXFile") Then
                 If l.StartsWith("P1|") Or l.StartsWith("P2|") Or l.StartsWith("M|") Then GoTo SkipCheck
-                If l.StartsWith("B|") And Not Form1.SwitchButton_BlocksEtc.Value Then GoTo SkipCheck 'Blcks
-                If l.StartsWith("N|") And Not Form1.SwitchButton_BlocksEtc.Value Then GoTo SkipCheck 'NPCs
-                If l.StartsWith("T|") And Not Form1.SwitchButton_BlocksEtc.Value Then GoTo SkipCheck 'Backgrounds
-                If l.StartsWith("Q|") And Not Form1.SwitchButton_Liquids.Value Then GoTo SkipCheck 'Liquids
-                If l.StartsWith("CB|") And Not Form1.SwitchButton_Configs.Value Then GoTo SkipCheck 'Custom Block Configurations
-                If l.StartsWith("CT|") And Not Form1.SwitchButton_Configs.Value Then GoTo SkipCheck 'Custom Backgrounds Configurations
-                If l.StartsWith("L|") And Not Form1.SwitchButton_Layers.Value Then GoTo SkipCheck 'Layer
-                If l.StartsWith("E|") And Not Form1.SwitchButton_Events.Value Then GoTo SkipCheck 'Events
-                If l.StartsWith("V|") And Not Form1.SwitchButton_Variables.Value Then GoTo SkipCheck 'Variables
-                If l.StartsWith("S|") And Not Form1.SwitchButton_Scripts.Value Then GoTo SkipCheck 'Scripts
-                If l.StartsWith("Su|") And Not Form1.SwitchButton_Scripts.Value Then GoTo SkipCheck 'Scripts
-                PFile.Add(l) 'Finaly add line to patch
+                If l.StartsWith("B|") And Not CopyBlocksEtc Then GoTo SkipCheck 'Blcks
+                If l.StartsWith("N|") And Not CopyBlocksEtc Then GoTo SkipCheck 'NPCs
+                If l.StartsWith("T|") And Not CopyBlocksEtc Then GoTo SkipCheck 'Backgrounds
+                If l.StartsWith("Q|") And Not CopyLiquids Then GoTo SkipCheck 'Liquids
+                If l.StartsWith("CB|") And Not CopyConfigurations Then GoTo SkipCheck 'Custom Block Configurations
+                If l.StartsWith("CT|") And Not CopyConfigurations Then GoTo SkipCheck 'Custom Backgrounds Configurations
+                If l.StartsWith("L|") And Not CopyLayers Then GoTo SkipCheck 'Layer
+                If l.StartsWith("E|") And Not CopyEvents Then GoTo SkipCheck 'Events
+                If l.StartsWith("V|") And Not CopyVariables Then GoTo SkipCheck 'Variables
+                If l.StartsWith("S|") And Not CopyScripts Then GoTo SkipCheck 'Scripts
+                If l.StartsWith("Su|") And Not CopyScripts Then GoTo SkipCheck 'Scripts
+                If Not PFile.Contains(l) Then PFile.Add(l) 'Finaly add line to patch
 SkipCheck:  End If
         Next
 
         'Check for custom graphics:
-        Dim OLeveldir As String = Path.GetDirectoryName(PatchedLevel) : Dim OLevelfiledir As String = OLeveldir & Path.GetFileNameWithoutExtension(PatchedLevel)
-        Dim PLeveldir As String = Path.GetDirectoryName(PatchedLevel) : Dim PLevelfiledir As String = PLeveldir & Path.GetFileNameWithoutExtension(PatchedLevel)
-        Dim OFilesInLeveldir() As String = Directory.GetFiles(OLeveldir) : Dim OFilesInLevelfiledir() As String = {""} : If Directory.Exists(OLevelfiledir) Then OFilesInLevelfiledir = Directory.GetFiles(OLevelfiledir)
-        Dim PFilesInLeveldir() As String = Directory.GetFiles(PLeveldir) : Dim PFilesInLevelfiledir() As String = {""} : If Directory.Exists(PLevelfiledir) Then PFilesInLevelfiledir = Directory.GetFiles(PLevelfiledir)
+        Dim OLeveldir As String = Path.GetDirectoryName(OriginalLevel) : Dim OLevelfiledir As String = OLeveldir & "\" & Path.GetFileNameWithoutExtension(OriginalLevel)
+        Dim PLeveldir As String = Path.GetDirectoryName(PatchedLevel) : Dim PLevelfiledir As String = PLeveldir & "\" & Path.GetFileNameWithoutExtension(PatchedLevel)
+        Dim OFilesInLeveldir() As String = Directory.GetFiles(OLeveldir) : Dim OFilesInLevelfiledir() As String = {} : If Directory.Exists(OLevelfiledir) Then OFilesInLevelfiledir = Directory.GetFiles(OLevelfiledir)
+        Dim PFilesInLeveldir() As String = Directory.GetFiles(PLeveldir) : Dim PFilesInLevelfiledir() As String = {} : If Directory.Exists(PLevelfiledir) Then PFilesInLevelfiledir = Directory.GetFiles(PLevelfiledir)
         Dim FilesToCopyInLeveldir As New List(Of String) : Dim FilesToCopyInLevelfiledir As New List(Of String)
         Dim UsedNPCs As New List(Of String)
 
-        If Form1.SwitchButton_Graphics.Value Then
-            For Each l As String In PFile
-                If l.StartsWith("B|") Then
-                    Dim lid As String = l.Replace("B|", "").Split("|")(1)
-                    Dim lFileInLeveldir As String = String.Format(PLeveldir & "\block-{0}.png", lid)
-                    Dim lFileInLevelfiledir As String = String.Format(PLevelfiledir & "\block-{0}.png", lid)
-                    If FilesToCopyInLeveldir.Contains(lFileInLeveldir) Or FilesToCopyInLevelfiledir.Contains(lFileInLevelfiledir) Then GoTo Skip1
-                    If Directory.Exists(PLevelfiledir) And Directory.Exists(OLevelfiledir) Then
-                        If File.Exists(lFileInLevelfiledir) And Not File.Exists(lFileInLevelfiledir) Then
-                            FilesToCopyInLevelfiledir.Add(lFileInLevelfiledir) : GoTo Skip1
-                        End If
-                    ElseIf Directory.Exists(PLevelfiledir) Then
-                        FilesToCopyInLevelfiledir.Add(lFileInLevelfiledir) : GoTo Skip1
-                    End If
-                    If File.Exists(lFileInLeveldir) And Not File.Exists(lFileInLeveldir) Then
-                        FilesToCopyInLeveldir.Add(lFileInLeveldir)
-                    End If
-Skip1:              Application.DoEvents()
-                ElseIf l.StartsWith("N|") Then
-                    Dim lid As String = l.Replace("N|", "").Split("|")(1) : UsedNPCs.Add(lid)
-                    Dim lFileInLeveldir As String = String.Format(PLeveldir & "\npc-{0}.png", lid)
-                    Dim lFileInLevelfiledir As String = String.Format(PLevelfiledir & "\npc-{0}.png", lid)
-                    If FilesToCopyInLeveldir.Contains(lFileInLeveldir) Or FilesToCopyInLevelfiledir.Contains(lFileInLevelfiledir) Then GoTo Skip2
-                    If Directory.Exists(PLevelfiledir) And Directory.Exists(OLevelfiledir) Then
-                        If File.Exists(lFileInLevelfiledir) And Not File.Exists(lFileInLevelfiledir) Then
-                            FilesToCopyInLevelfiledir.Add(lFileInLevelfiledir) : GoTo Skip2
-                        End If
-                    ElseIf Directory.Exists(PLevelfiledir) Then
-                        FilesToCopyInLevelfiledir.Add(lFileInLevelfiledir) : GoTo Skip2
-                    End If
-                    If File.Exists(lFileInLeveldir) And Not File.Exists(lFileInLeveldir) Then
-                        FilesToCopyInLeveldir.Add(lFileInLeveldir)
-                    End If
-Skip2:              Application.DoEvents()
-                ElseIf l.StartsWith("T|") Then
-                    Dim lid As String = l.Replace("T|", "").Split("|")(1)
-                    Dim lFileInLeveldir As String = String.Format(PLeveldir & "\background-{0}.png", lid)
-                    Dim lFileInLevelfiledir As String = String.Format(PLevelfiledir & "\background-{0}.png", lid)
-                    If FilesToCopyInLeveldir.Contains(lFileInLeveldir) Or FilesToCopyInLevelfiledir.Contains(lFileInLevelfiledir) Then GoTo Skip4
-                    If Directory.Exists(PLevelfiledir) And Directory.Exists(OLevelfiledir) Then
-                        If File.Exists(lFileInLevelfiledir) And Not File.Exists(lFileInLevelfiledir) Then
-                            FilesToCopyInLevelfiledir.Add(lFileInLevelfiledir) : GoTo Skip4
-                        End If
-                    ElseIf Directory.Exists(PLevelfiledir) Then
-                        FilesToCopyInLevelfiledir.Add(lFileInLevelfiledir) : GoTo Skip4
-                    End If
-                    If File.Exists(lFileInLeveldir) And Not File.Exists(lFileInLeveldir) Then
-                        FilesToCopyInLeveldir.Add(lFileInLeveldir)
-                    End If
-Skip4:              Application.DoEvents()
-                End If
+        If CopyGraphics Then
+            For Each f As String In PFilesInLeveldir
+                If Not OFilesInLeveldir.Contains(f) And Not FilesToCopyInLeveldir.Contains(f) Then
+                    If (Path.GetExtension(f) = ".png" And CopyGraphics) Or (Path.GetExtension(f) = ".txt" And CopyConfigurations) Then FilesToCopyInLeveldir.Add(f)
+                End If : Application.DoEvents()
             Next
-
-            For i As Integer = 1 To 172
-                Dim lFileInLeveldir As String = String.Format(PLeveldir & "\effect-{0}.png", i)
-                Dim lFileInLevelfiledir As String = String.Format(PLevelfiledir & "\effect-{0}.png", i)
-                If Directory.Exists(PLevelfiledir) And Directory.Exists(OLevelfiledir) Then
-                    If File.Exists(lFileInLevelfiledir) And Not File.Exists(lFileInLevelfiledir) Then
-                        FilesToCopyInLevelfiledir.Add(lFileInLevelfiledir) : GoTo Skip5
-                    End If
-                ElseIf Directory.Exists(PLevelfiledir) Then
-                    FilesToCopyInLevelfiledir.Add(lFileInLevelfiledir) : GoTo Skip5
-                End If
-                If File.Exists(lFileInLeveldir) And Not File.Exists(lFileInLeveldir) Then
-                    FilesToCopyInLeveldir.Add(lFileInLeveldir)
-                End If
-Skip5:          Application.DoEvents()
-            Next
-
-            For Each p As String In {"mario", "luigi", "toad", "peach", "link"}
-                For i As Integer = 1 To 12
-                    Dim lFileInLeveldir As String = String.Format(PLeveldir & "\{1}-{0}.png", i, p)
-                    Dim lFileInLevelfiledir As String = String.Format(PLevelfiledir & "\{1}-{0}.png", i, p)
-                    If Directory.Exists(PLevelfiledir) And Directory.Exists(OLevelfiledir) Then
-                        If File.Exists(lFileInLevelfiledir) And Not File.Exists(lFileInLevelfiledir) Then
-                            FilesToCopyInLevelfiledir.Add(lFileInLevelfiledir) : GoTo Skip6
-                        End If
-                    ElseIf Directory.Exists(PLevelfiledir) Then
-                        FilesToCopyInLevelfiledir.Add(lFileInLevelfiledir) : GoTo Skip6
-                    End If
-                    If File.Exists(lFileInLeveldir) And Not File.Exists(lFileInLeveldir) Then
-                        FilesToCopyInLeveldir.Add(lFileInLeveldir)
-                    End If
-Skip6:              Application.DoEvents()
-                Next
-            Next
-
-            For Each p As String In {"yoshib", "yoshit"}
-                For i As Integer = 1 To 8
-                    Dim lFileInLeveldir As String = String.Format(PLeveldir & "\{1}-{0}.png", i, p)
-                    Dim lFileInLevelfiledir As String = String.Format(PLevelfiledir & "\{1}-{0}.png", i, p)
-                    If Directory.Exists(PLevelfiledir) And Directory.Exists(OLevelfiledir) Then
-                        If File.Exists(lFileInLevelfiledir) And Not File.Exists(lFileInLevelfiledir) Then
-                            FilesToCopyInLevelfiledir.Add(lFileInLevelfiledir) : GoTo Skip7
-                        End If
-                    ElseIf Directory.Exists(PLevelfiledir) Then
-                        FilesToCopyInLevelfiledir.Add(lFileInLevelfiledir) : GoTo Skip7
-                    End If
-                    If File.Exists(lFileInLeveldir) And Not File.Exists(lFileInLeveldir) Then
-                        FilesToCopyInLeveldir.Add(lFileInLeveldir)
-                    End If
-Skip7:              Application.DoEvents()
-                Next
-            Next
-
-            If Directory.Exists(PLevelfiledir) And Directory.Exists(OLevelfiledir) Then
-                If File.Exists(PLevelfiledir & "\yoshi-0.png") And Not File.Exists(PLevelfiledir & "\yoshi-0.png") Then
-                    FilesToCopyInLevelfiledir.Add(PLevelfiledir & "\yoshi-0.png") : GoTo Skip8
-                End If
-            ElseIf Directory.Exists(PLevelfiledir) Then
-                FilesToCopyInLevelfiledir.Add(PLevelfiledir & "\yoshi-0.png") : GoTo Skip8
-            End If
-            If File.Exists(PLeveldir & "\yoshi-0.png") And Not File.Exists(PLeveldir & "\yoshi-0.png") Then
-                FilesToCopyInLeveldir.Add(PLeveldir & "ßyoshi-0.png")
-            End If
-Skip8:      Application.DoEvents()
-
-            If Directory.Exists(PLevelfiledir) And Directory.Exists(OLevelfiledir) Then
-                If File.Exists(PLevelfiledir & "\scflash.png") And Not File.Exists(PLevelfiledir & "\scflash.png") Then
-                    FilesToCopyInLevelfiledir.Add(PLevelfiledir & "\scflash.png") : GoTo Skip15
-                End If
-            ElseIf Directory.Exists(PLevelfiledir) Then
-                FilesToCopyInLevelfiledir.Add(PLevelfiledir & "\scflash.png") : GoTo Skip15
-            End If
-            If File.Exists(PLeveldir & "\scflash.png") And Not File.Exists(PLeveldir & "\scflash.png") Then
-                FilesToCopyInLeveldir.Add(PLeveldir & "\scflash.png")
-            End If
-Skip15:     Application.DoEvents()
-        End If
-
-        If CopyConfigurations Then
-            For Each lid As String In UsedNPCs
-                Dim lFileInLeveldir As String = String.Format(PLeveldir & "\npc-{0}.png", lid)
-                Dim lFileInLevelfiledir As String = String.Format(PLevelfiledir & "\npc-{0}.png", lid)
-                If FilesToCopyInLeveldir.Contains(lFileInLeveldir) Or FilesToCopyInLevelfiledir.Contains(lFileInLevelfiledir) Then GoTo Skip9
-                If Directory.Exists(PLevelfiledir) And Directory.Exists(OLevelfiledir) Then
-                    If File.Exists(lFileInLevelfiledir) And Not File.Exists(lFileInLevelfiledir) Then
-                        FilesToCopyInLevelfiledir.Add(lFileInLevelfiledir) : GoTo Skip9
-                    End If
-                ElseIf Directory.Exists(PLevelfiledir) Then
-                    FilesToCopyInLevelfiledir.Add(lFileInLevelfiledir) : GoTo Skip9
-                End If
-                If File.Exists(lFileInLeveldir) And Not File.Exists(lFileInLeveldir) Then
-                    FilesToCopyInLeveldir.Add(lFileInLeveldir)
-                End If
-Skip9:          Application.DoEvents()
+            For Each f As String In PFilesInLevelfiledir
+                If Not OFilesInLevelfiledir.Contains(f) And Not FilesToCopyInLevelfiledir.Contains(f) Then
+                    If (Path.GetExtension(f) = ".png" And CopyGraphics) Or (Path.GetExtension(f) = ".txt" And CopyConfigurations) Then FilesToCopyInLevelfiledir.Add(f)
+                End If : Application.DoEvents()
             Next
         End If
 
         'Copy files and directories to the temp-dir:
         Dim TempLeveldir As String = Form1.TempDir & "\TempLevel"
         Dim TempLevelfiledir As String = TempLeveldir & "\data"
-        If Directory.Exists(TempLeveldir) Then Directory.Delete(TempLeveldir, True)
-        Directory.CreateDirectory(TempLeveldir)
-        If FilesToCopyInLevelfiledir.Count > 0 Then Directory.CreateDirectory(TempLevelfiledir)
+        If Directory.Exists(TempLeveldir) Then Directory.Delete(TempLeveldir, True) : Application.DoEvents()
+        Directory.CreateDirectory(TempLeveldir) : Application.DoEvents()
         For Each f As String In FilesToCopyInLeveldir
-            Try : File.Copy(f, TempLeveldir & "\" & Path.GetFileName(f)) : Catch ex As Exception : End Try
+            Try : File.Copy(f, TempLeveldir & "\" & Path.GetFileName(f)) : Catch ex As Exception : MsgBox(ex.Message) : End Try
             Application.DoEvents() : Next
+        If FilesToCopyInLevelfiledir.Count > 0 Then Directory.CreateDirectory(TempLevelfiledir)
         For Each f As String In FilesToCopyInLevelfiledir
-            Try : File.Copy(f, TempLevelfiledir & "\" & Path.GetFileName(f)) : Catch ex As Exception : End Try
+            Try : File.Copy(f, TempLevelfiledir & "\" & Path.GetFileName(f)) : Catch ex As Exception : MsgBox(ex.Message) : End Try
             Application.DoEvents() : Next
 
         'Write level:
-        File.WriteAllLines(TempLeveldir & "\data.lvl", PFile.ToArray)
+        File.WriteAllLines(TempLeveldir & "\data.dat", PFile.ToArray)
 
         'Pack with 7-zip:
+        If File.Exists(PatchFile) Then File.Delete(PatchFile)
         Dim sevenzip As New Process
-        sevenzip.StartInfo.CreateNoWindow = True
-
         If Environment.Is64BitOperatingSystem Then
             sevenzip.StartInfo.FileName = Application.StartupPath & "\7-Zip\x64\7z.exe"
         Else : sevenzip.StartInfo.FileName = Application.StartupPath & "\7-Zip\x86\7z.exe"
         End If
-        Dim password As String = "SMBX Magic Patcher"
-        sevenzip.StartInfo.Arguments = String.Format("a -t7z ""{1}"" -p{0} -mx9 ""{2}""", password, Form1.TextBoxX_PatchFileCreate.Text, TempLeveldir & "\*")
+        Dim password As String = "SMBXMagicPatcher"
+        sevenzip.StartInfo.Arguments = String.Format("a -t7z ""{1}"" -p{0} -mhe -mx9 ""{2}""", password, Form1.TextBoxX_PatchFileCreate.Text, TempLeveldir & "\*")
         sevenzip.StartInfo.UseShellExecute = False
         sevenzip.StartInfo.CreateNoWindow = True
         sevenzip.Start()
@@ -329,13 +194,47 @@ Skip9:          Application.DoEvents()
     End Function
 
     Shared Function ApplyPatch(OriginalLevel As String, PatchFile As String) As Integer
-        Dim OLevel() As String = File.ReadAllLines(OriginalLevel)
-        Dim PLevel As List(Of String) = OLevel.ToList
+        Dim PatchTyp As Integer = 0 '0 = plx | 1 = slp
+        Dim PLevel As List(Of String) = File.ReadAllLines(OriginalLevel).ToList
+        Dim TempLeveldir As String = Form1.TempDir & "\TempLevel"
+        Dim TempLevelfiledir As String = TempLeveldir & "\data"
+        If Directory.Exists(TempLeveldir) Then Directory.Delete(TempLeveldir, True)
+        Directory.CreateDirectory(TempLeveldir)
 
-        'Extract with 7-zip
+        'Check Patchtyp:
+        Select Case Path.GetExtension(PatchFile)
+            Case ".slp" : PatchTyp = 1
+            Case ".plx" : PatchTyp = 0
+            Case Else : Return 3
+        End Select
 
-        Dim PFile() As String = File.ReadAllLines("<extracted file>")
+        'Extract with 7-zip:
+        If PatchTyp = 0 Then
+            Dim sevenzip As New Process
+            If Environment.Is64BitOperatingSystem Then
+                sevenzip.StartInfo.FileName = Application.StartupPath & "\7-Zip\x64\7z.exe"
+            Else : sevenzip.StartInfo.FileName = Application.StartupPath & "\7-Zip\x86\7z.exe"
+            End If
+            Dim password As String = "SMBXMagicPatcher"
+            sevenzip.StartInfo.Arguments = String.Format("x ""{1}"" -p{0} -o""{2}"" -r", password, Form1.TextBoxX_PatchFileApply.Text, TempLeveldir & "\")
+            sevenzip.StartInfo.UseShellExecute = False
+            sevenzip.StartInfo.CreateNoWindow = True
+            sevenzip.Start()
 
+            Do Until sevenzip.HasExited = True : Application.DoEvents() : Loop
+            If sevenzip.ExitCode <> 0 Then
+                Return 2 'Error at packing
+            End If
+        End If
+
+        'Load patchlevel:
+        Dim PFile() As String = {""}
+        Select Case PatchTyp
+            Case 0 : PFile = File.ReadAllLines(TempLeveldir & "\data.dat")
+            Case 1 : PFile = File.ReadAllLines(PatchFile)
+        End Select
+
+        'Apply lines in patch to the level:
         For Each l As String In PFile
             If Not PLevel.Contains(l) Then
                 PLevel.Add(l)
@@ -343,8 +242,15 @@ Skip9:          Application.DoEvents()
         Next
 
         'Copy and replace files
+        If PatchTyp = 0 Then
+            Dim ListFilesInLeveldir() As String = Directory.GetFileSystemEntries(TempLeveldir)
+
+        End If
 
         'Wirte new level file
+        Do While PLevel.Contains("")
+            PLevel.Remove("") : Application.DoEvents() : Loop
+        File.WriteAllLines(OriginalLevel, PLevel.ToArray)
 
         Return 1
     End Function
