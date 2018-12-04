@@ -124,6 +124,9 @@
     <value>Use this, if you would make a patch of a little feauture wich is in a level of e.g. your episode. Then you should make a level "without feauture" and "with feauture".
 That means that all things (like npc's or custom graphics), wich you used in this level will, be ignored.</value>
   </data>
+  <metadata name="StyleManager1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>145, 17</value>
+  </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

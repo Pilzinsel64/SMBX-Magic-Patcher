@@ -12,7 +12,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("This is a simple tool to create and apply patchs of SMBX files.")>
 <Assembly: AssemblyCompany("")>
 <Assembly: AssemblyProduct("SMBX Magic Patcher")>
-<Assembly: AssemblyCopyright("Copyright © Pilzinsel64 2017")>
+<Assembly: AssemblyCopyright("Copyright © Pilzinsel64 2017 - 2018")>
 <Assembly: AssemblyTrademark("")>
 
 <Assembly: ComVisible(False)>
@@ -31,5 +31,5 @@ Imports System.Runtime.InteropServices
 ' übernehmen, indem Sie "*" eingeben:
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
-<Assembly: AssemblyVersion("1.0.0.0")>
-<Assembly: AssemblyFileVersion("1.0.0.0")>
+<Assembly: AssemblyVersion("1.1.0.0")>
+<Assembly: AssemblyFileVersion("1.1.0.0")>
